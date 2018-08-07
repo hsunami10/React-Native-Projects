@@ -2,7 +2,9 @@ import firebase from 'firebase';
 import {
   EMAIL_CHANGED,
   PASSWORD_CHANGED,
-  LOGIN_USER_SUCCESS
+  LOGIN_USER_SUCCESS,
+  LOGIN_USER_FAIL,
+  LOGIN_USER
 } from './types';
 
 export const emailChanged = text => {
@@ -19,16 +21,32 @@ export const passwordChanged = text => {
   };
 };
 
+/*
+NOTE: Any error that happens inside of .then() - syntax error, etc.,
+firebase sees it as something went wrong with the REQUEST, so it
+executes the catch statement.
+*/
 export const loginUser = (email, password) => {
   return (dispatch) => {
+    dispatch({ type: LOGIN_USER });
+
     firebase.auth().signInWithEmailAndPassword(email, password)
-      .then(obj => {
-        // NOTE: Dispatch action after sign in finished
-        // Can dispatch multiple actions
-        dispatch({
-          type: LOGIN_USER_SUCCESS,
-          payload: obj.user
-        });
+      .then(obj => loginUserSuccess(dispatch, obj.user))
+      .catch(() => {
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+          .then(obj => loginUserSuccess(dispatch, obj.user))
+          .catch(() => loginUserFail(dispatch));
       });
   };
+};
+
+const loginUserFail = (dispatch) => {
+  dispatch({ type: LOGIN_USER_FAIL });
+};
+
+const loginUserSuccess = (dispatch, user) => {
+  dispatch({
+    type: LOGIN_USER_SUCCESS,
+    payload: user
+  });
 };
