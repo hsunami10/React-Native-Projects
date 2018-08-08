@@ -10,20 +10,25 @@ class LoginScreen extends Component {
         <Button
           onPress={navigation.getParam('increaseCount')}
           title="+1"
-          color="#fff"
+          color="#000"
         />
       ),
       // headerBackTitle: 'Back' // Name back button for next screen
     };
   };
 
-  state = { count: 0 };
+  constructor(props) {
+    super(props);
 
-  componentDidMount() {
-    this.props.navigation.setParams({ increaseCount: this._increaseCount });
+    this.state = { count: 0 };
+    this.increaseCount = this.increaseCount.bind(this);
   }
 
-  _increaseCount = () => {
+  componentWillMount() {
+    this.props.navigation.setParams({ increaseCount: this.increaseCount });
+  }
+
+  increaseCount = () => {
     this.setState({ count: this.state.count + 1 });
   }
 

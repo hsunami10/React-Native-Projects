@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import { Button } from 'react-native';
 import EmployeeList from '../components/EmployeeList';
 
 class EmployeeListScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: `${navigation.getParam('email', '')}'s Employees`,
+      title: `${navigation.getParam('email', '')}'s List`,
       headerStyle: {
         backgroundColor: '#fff'
       },
@@ -12,9 +13,31 @@ class EmployeeListScreen extends Component {
       headerTitleStyle: {
         fontWeight: 'bold',
       },
-      headerLeft: null // Remove default back button
+      headerLeft: null, // Remove default back button
+      headerRight: (
+        <Button
+          onPress={navigation.getParam('addEmployee')}
+          title="Add"
+          color="#85aaf5"
+        />
+      ),
+      headerBackTitle: null // Remove back title for NEXT screen
     };
   };
+
+  constructor(props) {
+    super(props);
+
+    this.addEmployee = this.addEmployee.bind(this);
+  }
+
+  componentWillMount() {
+    this.props.navigation.setParams({ addEmployee: this.addEmployee });
+  }
+
+  addEmployee() {
+    this.props.navigation.navigate('EmployeeCreate');
+  }
 
   render() {
     return <EmployeeList />;
