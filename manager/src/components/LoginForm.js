@@ -8,7 +8,7 @@ class LoginForm extends Component {
   componentDidUpdate(prevProps, prevState) {
     // If login success
     if (prevProps.user == null && this.props.user != null) {
-      this.props.navigation.navigate('EmployeeList');
+      this.props.navigation.navigate('EmployeeList', { email: this.props.user.email });
     }
   }
 

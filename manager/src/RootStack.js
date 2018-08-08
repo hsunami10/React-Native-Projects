@@ -11,7 +11,17 @@ const RootStack = createStackNavigator(
     EmployeeList: EmployeeListScreen,
   },
   {
-    initialRouteName: 'Home'
+    initialRouteName: 'Home',
+    /* Default navigation options for all screens in this stack, if not overriden */
+    navigationOptions: {
+      headerStyle: {
+        backgroundColor: '#85aaf5'
+      },
+      headerTintColor: '#fff', // Text color in header
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      }
+    }
   }
 );
 
