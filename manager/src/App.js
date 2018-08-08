@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import firebase from 'firebase';
-import LoginForm from './components/LoginForm';
+import RootStack from './RootStack';
 import store from '../index';
 
 class App extends Component {
@@ -20,7 +20,7 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <LoginForm />
+        <RootStack />
       </Provider>
     );
   }

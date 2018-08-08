@@ -5,6 +5,13 @@ import { emailChanged, passwordChanged, loginUser } from '../actions';
 import { Card, CardSection, Input, Button, Spinner } from './common';
 
 class LoginForm extends Component {
+  componentDidUpdate(prevProps, prevState) {
+    // If login success
+    if (prevProps.user == null && this.props.user != null) {
+      this.props.navigation.navigate('EmployeeList');
+    }
+  }
+
   onEmailChange(text) {
     this.props.emailChanged(text);
   }
@@ -86,7 +93,8 @@ const mapStateToProps = state => {
     email: state.auth.email,
     password: state.auth.password,
     error: state.auth.error,
-    loading: state.auth.loading
+    loading: state.auth.loading,
+    user: state.auth.user
   };
 };
 
