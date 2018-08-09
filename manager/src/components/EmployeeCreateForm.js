@@ -1,10 +1,40 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Picker, Text } from 'react-native';
-import { Card, CardSection, Input, Button } from './common';
-import { createEmployeeUpdate } from '../actions/EmployeeActions';
+import { Picker, Text, Alert } from 'react-native';
+import { Card, CardSection, Input, Button, FullScreenSpinner, Spinner } from './common';
+import {
+  createEmployeeUpdate,
+  createNewEmployee,
+  startLoading
+} from '../actions/EmployeeActions';
 
 class EmployeeCreateForm extends Component {
+  onButtonPress() {
+    const { navigation, name, phone, shift } = this.props;
+    if (name.trim() && phone.trim()) {
+      this.props.startLoading();
+      this.props.createNewEmployee(navigation, { name, phone, shift: shift || 'Thursday' });
+    } else {
+      Alert.alert(
+        'Oops!',
+        'You have submitted invalid inputs',
+        [
+          { text: 'Cancel', onPress: null, style: 'cancel' },
+          { text: 'Ok', onPress: null }
+        ]
+      );
+    }
+  }
+
+  renderLoading() {
+    if (this.props.loading) {
+      return (
+        <FullScreenSpinner />
+      );
+    }
+    return null;
+  }
+
   render() {
     return (
       <Card>
@@ -43,10 +73,12 @@ class EmployeeCreateForm extends Component {
         </CardSection>
 
         <CardSection>
-          <Button>
+          <Button onPress={this.onButtonPress.bind(this)}>
             Create
           </Button>
         </CardSection>
+
+        {this.renderLoading()}
       </Card>
     );
   }
@@ -60,8 +92,12 @@ const styles = {
 };
 
 const mapStateToProps = state => {
-  const { name, phone, shift } = state.createEmployeeForm;
-  return { name, phone, shift };
+  const { name, phone, shift, loading } = state.createEmployeeForm;
+  return { name, phone, shift, loading };
 };
 
-export default connect(mapStateToProps, { createEmployeeUpdate })(EmployeeCreateForm);
+export default connect(mapStateToProps, {
+  createEmployeeUpdate,
+  createNewEmployee,
+  startLoading
+})(EmployeeCreateForm);

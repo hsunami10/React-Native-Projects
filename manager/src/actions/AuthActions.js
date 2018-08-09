@@ -27,7 +27,7 @@ firebase sees it as something went wrong with the REQUEST, so it
 executes the catch statement.
 */
 export const loginUser = (email, password) => {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({ type: LOGIN_USER });
 
     firebase.auth().signInWithEmailAndPassword(email, password)
@@ -40,7 +40,7 @@ export const loginUser = (email, password) => {
     };
 };
 
-const loginUserFail = (dispatch) => {
+const loginUserFail = dispatch => {
   dispatch({ type: LOGIN_USER_FAIL });
 };
 

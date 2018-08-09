@@ -11,7 +11,7 @@ class EmployeeCreateScreen extends Component {
 
   render() {
     return (
-      <EmployeeCreateForm />
+      <EmployeeCreateForm navigation={this.props.navigation} />
     );
   }
 }
