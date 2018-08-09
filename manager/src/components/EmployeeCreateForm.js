@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Picker, Text, Alert } from 'react-native';
-import { Card, CardSection, Input, Button, FullScreenSpinner, Spinner } from './common';
+import { Card, CardSection, Input, Button, FullScreenSpinner } from './common';
 import {
   createEmployeeUpdate,
   createNewEmployee,
