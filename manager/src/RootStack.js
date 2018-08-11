@@ -17,6 +17,13 @@ https://medium.com/4thought-studios/better-modals-in-react-navigation-56c649e024
 Nest another stack navigator for modals
 Why? Stack inside "ModalStack" would have a navigation header, but would not be visible
 until you open it
+
+When the screen renders, it looks at 'RootStack' from top to bottom. Then it sees
+'initialRouteName', and renders that component first. The default 'card' mode in
+MainStack works because you're already inside of it, since 'Home' is rendered.
+Rendering the CreateEmployeeModal gives a modal transition because you're IN the
+RootStack. Now, if you go from 'CreateModal' to another modal in the ModalStack, then
+it would follow whatever rule is in the modal stack navigator.
 */
 
 // Stack to hold all main screens
