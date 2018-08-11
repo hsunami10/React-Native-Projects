@@ -3,7 +3,7 @@ import { Button } from 'react-native';
 import EmployeeList from '../components/EmployeeList';
 
 class EmployeeListScreen extends Component {
-  static navigationOptions = ({ navigation }) => {
+  static navigationOptions = ({ navigation }) => { // Override default navigationOptions
     return {
       title: `${navigation.getParam('email', '')}'s List`,
       headerStyle: {
@@ -36,7 +36,7 @@ class EmployeeListScreen extends Component {
   }
 
   addEmployee() {
-    this.props.navigation.navigate('EmployeeCreate');
+    this.props.navigation.navigate('CreateModal');
   }
 
   render() {
