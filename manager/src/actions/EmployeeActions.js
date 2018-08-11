@@ -20,7 +20,7 @@ export const createNewEmployee = (navigation, fieldsObj) => {
     firebase.database().ref(`/users/${user.uid}/employees`)
       .push(fieldsObj)
       .then(() => {
-        navigation.goBack();
+        navigation.popToTop();
         dispatch({ type: CREATE_NEW_EMPLOYEE });
       })
       .catch(error => {

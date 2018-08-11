@@ -24,6 +24,8 @@ MainStack works because you're already inside of it, since 'Home' is rendered.
 Rendering the CreateEmployeeModal gives a modal transition because you're IN the
 RootStack. Now, if you go from 'CreateModal' to another modal in the ModalStack, then
 it would follow whatever rule is in the modal stack navigator.
+Whatever mode is in RootStack, that is the mode that will be followed when navigating
+between whatever is listed in the route configurations, so BETWEEN the two stack navigators.
 */
 
 // Stack to hold all main screens
