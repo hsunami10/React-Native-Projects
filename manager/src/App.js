@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import { Platform } from 'react-native';
 import { Provider } from 'react-redux';
+import { SafeAreaView } from 'react-navigation';
+import { isIphoneX } from 'react-native-iphone-x-helper';
 import firebase from 'firebase';
 import RootStack from './RootStack';
 import store from '../index';
@@ -15,9 +18,19 @@ class App extends Component {
       messagingSenderId: '886965516932'
     };
     firebase.initializeApp(config);
+    console.log(Platform.OS); // 'ios', 'android'
   }
 
   render() {
+    if (isIphoneX()) {
+      return (
+        <SafeAreaView style={{ flex: 1 }}>
+          <Provider store={store}>
+            <RootStack />
+          </Provider>
+        </SafeAreaView>
+      );
+    }
     return (
       <Provider store={store}>
         <RootStack />
