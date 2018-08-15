@@ -5,12 +5,12 @@ import { emailChanged, passwordChanged, loginUser } from '../actions/AuthActions
 import { Card, CardSection, Input, Button, Spinner } from './common';
 
 class LoginForm extends Component {
-  componentDidUpdate(prevProps, prevState) {
-    // If login success
-    if (prevProps.user == null && this.props.user != null) {
-      this.props.navigation.navigate('EmployeeList', { email: this.props.user.email });
-    }
-  }
+  // componentDidUpdate(prevProps, prevState) {
+  //   // If login success
+  //   if (prevProps.user == null && this.props.user != null) {
+  //     this.props.navigation.navigate('EmployeeList', { email: this.props.user.email });
+  //   }
+  // }
 
   onEmailChange(text) {
     this.props.emailChanged(text);
@@ -22,7 +22,7 @@ class LoginForm extends Component {
 
   onButtonPress() {
     const { email, password } = this.props;
-    this.props.loginUser(email, password);
+    this.props.loginUser(email, password, this.props.navigation);
   }
 
   renderError() {

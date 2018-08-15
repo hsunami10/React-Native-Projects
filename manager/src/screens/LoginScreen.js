@@ -15,8 +15,8 @@ class LoginScreen extends Component {
       ),
       headerLeft: (
         <Button
-          onPress={navigation.getParam('decreaseCount')}
-          title="-1"
+          onPress={() => navigation.navigate('Fade1')}
+          title="Fade"
           color="#000"
         />
       )
@@ -29,7 +29,6 @@ class LoginScreen extends Component {
 
     this.state = { count: 0 };
     this.increaseCount = this.increaseCount.bind(this);
-    this.decreaseCount = this.decreaseCount.bind(this);
   }
 
   componentWillMount() {
@@ -41,10 +40,6 @@ class LoginScreen extends Component {
 
   increaseCount = () => {
     this.setState({ count: this.state.count + 1 });
-  }
-
-  decreaseCount = () => {
-    this.setState({ count: this.state.count - 1 });
   }
 
   render() {

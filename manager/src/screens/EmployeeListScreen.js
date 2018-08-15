@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from 'react-native';
+import { Button, AsyncStorage } from 'react-native';
 import EmployeeList from '../components/EmployeeList';
 
 class EmployeeListScreen extends Component {
@@ -13,7 +13,13 @@ class EmployeeListScreen extends Component {
       headerTitleStyle: {
         fontWeight: 'bold',
       },
-      headerLeft: null, // Remove default back button
+      headerLeft: (
+        <Button
+          onPress={navigation.getParam('logOut')}
+          title="Log Out"
+          color="#85aaf5"
+        />
+      ),
       headerRight: (
         <Button
           onPress={navigation.getParam('addEmployee')}
@@ -25,18 +31,27 @@ class EmployeeListScreen extends Component {
     };
   };
 
-  constructor(props) {
-    super(props);
-
-    this.addEmployee = this.addEmployee.bind(this);
-  }
-
   componentWillMount() {
-    this.props.navigation.setParams({ addEmployee: this.addEmployee });
+    this.props.navigation.setParams({
+      addEmployee: this.addEmployee.bind(this),
+      logOut: this.logOut.bind(this)
+    });
   }
 
   addEmployee() {
     this.props.navigation.navigate('CreateModal');
+  }
+
+  async logOut() {
+    try {
+      await Promise.all([
+        AsyncStorage.removeItem('manager_login_email'),
+        AsyncStorage.removeItem('manager_login_password')
+      ]);
+      this.props.navigation.navigate('Auth');
+    } catch (error) {
+      console.log(`EmployeeListScreen error: ${error}`);
+    }
   }
 
   render() {

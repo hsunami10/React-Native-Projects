@@ -2,8 +2,86 @@ import { createStackNavigator } from 'react-navigation';
 import {
   LoginScreen,
   EmployeeListScreen,
-  CreateEmployeeModal
+  CreateEmployeeModal,
+  FadeScreen,
+  FadeScreen2,
+  BottomScreen3
 } from './screens';
+import AuthLoadingScreen from './screens/AuthLoadingScreen';
+
+// NOTE: Make more nested stack navigators
+// So there's a card / modal animation when going from Auth to App (fading right now)
+/*
+NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE 
+RootStack (
+  AuthLoadingScreen,
+  Main (
+    AuthStack (
+      Welcome,
+      SignUp,
+      LogIn
+    ),
+    AppStack (
+      AppMainStack (
+        EmployeeList
+      ),
+      AppModalStack (
+        CreateEmployeeModal
+      )
+    )
+  )
+)
+*/
+
+// NOTE: Custom fade in/out transition
+/*
+Index - index of screen transitioning to
+sceneRange
+  - start at index - 1 (scene before one we're switching to)
+  - end at index (scene we're switching to
+outputOpacity
+  - 0 (invisible) to 1 (opaque)
+*/
+const FadeTransition = (index, position) => {
+  const sceneRange = [index - 1, index];
+  const outputOpacity = [0, 1];
+  const transition = position.interpolate({
+    inputRange: sceneRange,
+    outputRange: outputOpacity
+  });
+
+  // Determine which property to animate
+  return {
+    opacity: transition
+  };
+};
+
+// NOTE: Custom bottom transition
+const BottomTransition = (index, position, height) => {
+  const sceneRange = [index - 1, index];
+  const outputHeight = [height, 0]; // Bottom to top of screen
+  const transition = position.interpolate({
+    inputRange: sceneRange,
+    outputRange: outputHeight
+  });
+
+  return {
+    transform: [{ translateY: transition }]
+  };
+};
+
+const NavigationConfig = () => {
+  return {
+    screenInterpolator: sceneProps => {
+      const { scene, position, layout } = sceneProps;
+      const index = scene.index;
+      const height = layout.initHeight;
+
+      return FadeTransition(index, position);
+      // return BottomTransition(index, position, height);
+    }
+  };
+};
 
 /*
 2 parameters for createStackNavigator: Route Configurations, StackNavigator Configurations
@@ -29,17 +107,14 @@ between whatever is listed in the route configurations, so BETWEEN the two stack
 */
 
 // Stack to hold all main screens
-const MainStack = createStackNavigator(
+const AppMainStack = createStackNavigator(
   {
-    Home: {
-      screen: LoginScreen
-    },
     EmployeeList: {
       screen: EmployeeListScreen
     }
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'EmployeeList',
     /* Default navigation options for all screens in this stack, if not overriden */
     navigationOptions: {
       headerStyle: {
@@ -54,7 +129,7 @@ const MainStack = createStackNavigator(
 );
 
 // Stack to hold all modals
-const ModalStack = createStackNavigator(
+const AppModalStack = createStackNavigator(
   {
     CreateModal: {
       screen: CreateEmployeeModal
@@ -67,21 +142,69 @@ const ModalStack = createStackNavigator(
   }
 );
 
+// Stack to hold all fade transitions
+const FadeStack = createStackNavigator(
+  {
+    Fade1: FadeScreen,
+    Fade2: FadeScreen2,
+    Bottom3: BottomScreen3
+  },
+  {
+    initialRouteName: 'Fade1',
+    transitionConfig: NavigationConfig
+  }
+);
+
+// Combined stack to hold App and Fade screens (because different transitions)
+const MainStack = createStackNavigator(
+  {
+    App: AppMainStack,
+    Fade: FadeStack
+  },
+  {
+    initialRouteName: 'App',
+    headerMode: 'none'
+  }
+);
+
 // Looks at route configurations top to bottom
 // If you swap "Main" and "Modals", it would show modals first
-const RootStack = createStackNavigator(
+const AppStack = createStackNavigator(
   {
     Main: {
       screen: MainStack
     },
     Modals: {
-      screen: ModalStack
+      screen: AppModalStack
     }
   },
   {
     mode: 'modal', // default is 'card'
-    headerMode: 'none'
+    headerMode: 'none',
+    initialRouteName: 'Main'
   }
 );
 
-export default RootStack;
+const AuthStack = createStackNavigator(
+  {
+    LogIn: {
+      screen: LoginScreen
+    }
+  },
+  {
+    initialRouteName: 'LogIn'
+  }
+);
+
+
+export default createStackNavigator(
+  {
+    AuthLoading: AuthLoadingScreen,
+    App: AppStack,
+    Auth: AuthStack
+  },
+  {
+    headerMode: 'none',
+    transitionConfig: NavigationConfig
+  }
+);
