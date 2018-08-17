@@ -12,10 +12,10 @@ import AuthLoadingScreen from './screens/AuthLoadingScreen';
 // NOTE: Make more nested stack navigators
 // So there's a card / modal animation when going from Auth to App (fading right now)
 /*
-NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE 
-RootStack (
+NOTE: Layout for comment above
+Stack (
   AuthLoadingScreen,
-  Main (
+  RootStack (
     AuthStack (
       Welcome,
       SignUp,
@@ -23,13 +23,17 @@ RootStack (
     ),
     AppStack (
       AppMainStack (
-        EmployeeList
+        EmployeeList,
+        SLIDE / CARD TRANSITION
       ),
       AppModalStack (
         CreateEmployeeModal
-      )
+      ),
+      MODAL TRANSITION
     )
+    SLIDE / CARD TRANSITION
   )
+  FADE TRANSITION
 )
 */
 
@@ -73,9 +77,9 @@ const BottomTransition = (index, position, height) => {
 const NavigationConfig = () => {
   return {
     screenInterpolator: sceneProps => {
-      const { scene, position, layout } = sceneProps;
+      const { scene, position, /*layout*/ } = sceneProps;
       const index = scene.index;
-      const height = layout.initHeight;
+      // const height = layout.initHeight;
 
       return FadeTransition(index, position);
       // return BottomTransition(index, position, height);
@@ -107,7 +111,7 @@ between whatever is listed in the route configurations, so BETWEEN the two stack
 */
 
 // Stack to hold all main screens
-const AppMainStack = createStackNavigator(
+const MainStack = createStackNavigator(
   {
     EmployeeList: {
       screen: EmployeeListScreen
@@ -128,6 +132,19 @@ const AppMainStack = createStackNavigator(
   }
 );
 
+// Stack to hold all fade transitions
+const FadeStack = createStackNavigator(
+  {
+    Fade1: FadeScreen,
+    Fade2: FadeScreen2,
+    Bottom3: BottomScreen3
+  },
+  {
+    initialRouteName: 'Fade1',
+    transitionConfig: NavigationConfig
+  }
+);
+
 // Stack to hold all modals
 const AppModalStack = createStackNavigator(
   {
@@ -142,27 +159,14 @@ const AppModalStack = createStackNavigator(
   }
 );
 
-// Stack to hold all fade transitions
-const FadeStack = createStackNavigator(
-  {
-    Fade1: FadeScreen,
-    Fade2: FadeScreen2,
-    Bottom3: BottomScreen3
-  },
-  {
-    initialRouteName: 'Fade1',
-    transitionConfig: NavigationConfig
-  }
-);
-
 // Combined stack to hold App and Fade screens (because different transitions)
-const MainStack = createStackNavigator(
+const AppMainStack = createStackNavigator(
   {
-    App: AppMainStack,
+    AppMain: MainStack,
     Fade: FadeStack
   },
   {
-    initialRouteName: 'App',
+    initialRouteName: 'AppMain',
     headerMode: 'none'
   }
 );
@@ -171,12 +175,8 @@ const MainStack = createStackNavigator(
 // If you swap "Main" and "Modals", it would show modals first
 const AppStack = createStackNavigator(
   {
-    Main: {
-      screen: MainStack
-    },
-    Modals: {
-      screen: AppModalStack
-    }
+    Main: AppMainStack,
+    Modals: AppModalStack
   },
   {
     mode: 'modal', // default is 'card'
@@ -196,12 +196,22 @@ const AuthStack = createStackNavigator(
   }
 );
 
+// Navigating from auth screens to app screens needs card transition
+const RootStack = createStackNavigator(
+  {
+    Auth: AuthStack,
+    App: AppStack
+  },
+  {
+    headerMode: 'none'
+  }
+);
+
 
 export default createStackNavigator(
   {
-    AuthLoading: AuthLoadingScreen,
-    App: AppStack,
-    Auth: AuthStack
+    AuthLoading: AuthLoadingScreen, // or splash screen?
+    RootStack
   },
   {
     headerMode: 'none',
