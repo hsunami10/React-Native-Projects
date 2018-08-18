@@ -18,7 +18,7 @@ class FadeScreen extends Component {
           onPress={() => this.props.navigation.navigate('Fade2')}
         />
         <Button
-          title="Bottom to Three"
+          title="Fade to Three"
           color="black"
           onPress={() => this.props.navigation.navigate('Bottom3')}
         />

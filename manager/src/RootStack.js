@@ -1,15 +1,16 @@
-import { createStackNavigator } from 'react-navigation';
+import { createStackNavigator, createMaterialTopTabNavigator } from 'react-navigation';
 import React from 'react';
+import { View, Text, Button } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   LoginScreen,
   EmployeeListScreen,
   CreateEmployeeModal,
-  FadeScreen,
   FadeScreen2,
   BottomScreen3
 } from './screens';
 import { SearchHeader } from './components/common';
-import { View, TextInput } from 'react-native';
+
 import AuthLoadingScreen from './screens/AuthLoadingScreen';
 
 // NOTE: Make more nested stack navigators
@@ -135,15 +136,54 @@ const MainStack = createStackNavigator(
   }
 );
 
+// ========================== NOTE: Example tab stack ==========================
+const HomeScreen = ({ navigation }) => (
+  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <Text>Home!</Text>
+    <Button
+      title="Fade to Two"
+      color="pink"
+      onPress={() => navigation.navigate('Fade2')}
+    />
+  </View>
+);
+
+const SettingsScreen = ({ navigation }) => (
+  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <Text>Settings!</Text>
+    <Button
+      title="Fade to Three"
+      color="purple"
+      onPress={() => navigation.navigate('Bottom3')}
+    />
+  </View>
+);
+
+const TabStack = createMaterialTopTabNavigator(
+  {
+    Home: HomeScreen,
+    Settings: SettingsScreen
+  },
+  {
+    initialRouteName: 'Home',
+    tabBarOptions: {
+      activeTintColor: 'tomato',
+      inactiveTintColor: 'gray',
+    },
+  }
+);
+// ========================== NOTE: Example ends here ==========================
+
 // Stack to hold all fade transitions
 const FadeStack = createStackNavigator(
   {
-    Fade1: FadeScreen,
+    Fade1: TabStack,
     Fade2: FadeScreen2,
     Bottom3: BottomScreen3
   },
   {
     initialRouteName: 'Fade1',
+    headerMode: 'none',
     transitionConfig: NavigationConfig
   }
 );
@@ -199,7 +239,6 @@ const AuthStack = createStackNavigator(
   },
   {
     initialRouteName: 'LogIn',
-    // headerMode: 'none'
   }
 );
 

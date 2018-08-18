@@ -13,7 +13,7 @@ class BottomScreen3 extends Component {
       <View style={styles.viewStyle}>
         <Text>Bottom Screen!</Text>
         <Button
-          title="Bottom to One"
+          title="Fade to One"
           color="brown"
           onPress={() => this.props.navigation.goBack()}
         />
