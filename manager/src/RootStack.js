@@ -1,4 +1,5 @@
 import { createStackNavigator } from 'react-navigation';
+import React from 'react';
 import {
   LoginScreen,
   EmployeeListScreen,
@@ -7,6 +8,8 @@ import {
   FadeScreen2,
   BottomScreen3
 } from './screens';
+import { SearchHeader } from './components/common';
+import { View, TextInput } from 'react-native';
 import AuthLoadingScreen from './screens/AuthLoadingScreen';
 
 // NOTE: Make more nested stack navigators
@@ -160,6 +163,7 @@ const AppModalStack = createStackNavigator(
 );
 
 // Combined stack to hold App and Fade screens (because different transitions)
+// NOTE: This header stays on top no matter what screen it's on
 const AppMainStack = createStackNavigator(
   {
     AppMain: MainStack,
@@ -167,7 +171,11 @@ const AppMainStack = createStackNavigator(
   },
   {
     initialRouteName: 'AppMain',
-    headerMode: 'none'
+    navigationOptions: {
+      header: (
+        <SearchHeader />
+      )
+    }
   }
 );
 
@@ -187,12 +195,11 @@ const AppStack = createStackNavigator(
 
 const AuthStack = createStackNavigator(
   {
-    LogIn: {
-      screen: LoginScreen
-    }
+    LogIn: LoginScreen
   },
   {
-    initialRouteName: 'LogIn'
+    initialRouteName: 'LogIn',
+    // headerMode: 'none'
   }
 );
 

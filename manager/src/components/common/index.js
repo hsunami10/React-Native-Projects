@@ -6,3 +6,4 @@ export * from './Header';
 export * from './Input';
 export * from './Spinner';
 export * from './FullScreenSpinner';
+export * from './SearchHeader';
