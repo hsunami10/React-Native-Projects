@@ -81,9 +81,9 @@ const BottomTransition = (index, position, height) => {
 const NavigationConfig = () => {
   return {
     screenInterpolator: sceneProps => {
-      const { scene, position, /*layout*/ } = sceneProps;
+      const { scene, position, layout } = sceneProps;
       const index = scene.index;
-      // const height = layout.initHeight;
+      const height = layout.initHeight;
 
       return FadeTransition(index, position);
       // return BottomTransition(index, position, height);
@@ -145,6 +145,11 @@ const HomeScreen = ({ navigation }) => (
       color="pink"
       onPress={() => navigation.navigate('Fade2')}
     />
+    <Button
+      title="Back to Log In"
+      color="red"
+      onPress={() => navigation.navigate('LogIn')}
+    />
   </View>
 );
 
@@ -166,9 +171,28 @@ const TabStack = createMaterialTopTabNavigator(
   },
   {
     initialRouteName: 'Home',
+    navigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ focused, tintColor }) => {
+        const { routeName } = navigation.state;
+        let iconName;
+        if (routeName === 'Home') {
+          iconName = `ios-information-circle${focused ? '' : '-outline'}`;
+        } else if (routeName === 'Settings') {
+          iconName = `ios-options${focused ? '' : '-outline'}`;
+        }
+
+        // Can return any component here
+        return <Ionicons name={iconName} size={25} color={tintColor} />;
+      },
+      // tabBarLabel: <Text>Noobs + 1</Text> // Custom component in tab
+    }),
     tabBarOptions: {
+      showIcon: true,
       activeTintColor: 'tomato',
       inactiveTintColor: 'gray',
+      style: {
+        backgroundColor: 'white'
+      }
     },
   }
 );
