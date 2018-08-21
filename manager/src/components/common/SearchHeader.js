@@ -8,6 +8,7 @@ export const SearchHeader = ({ placeholder }) => {
   return (
     <View style={styles.viewStyle}>
       <TextInput
+        onChangeText={text => console.log(text)}
         style={styles.headerInputStyle}
         placeholder={placeholder || 'Search...'}
       />

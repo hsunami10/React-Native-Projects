@@ -193,6 +193,10 @@ const TabStack = createMaterialTopTabNavigator(
       inactiveTintColor: 'gray',
       style: {
         backgroundColor: 'white'
+      },
+      indicatorStyle: {
+        borderBottomColor: 'green',
+        borderBottomWidth: 2,
       }
     },
   }
@@ -267,6 +271,7 @@ const AuthStack = createStackNavigator(
   },
   {
     initialRouteName: 'LogIn',
+    headerMode: 'screen', // NOTE: Use for different header height transitions
   }
 );
 
