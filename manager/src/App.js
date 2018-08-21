@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import { Provider } from 'react-redux';
 import { SafeAreaView } from 'react-navigation';
 import { isIphoneX } from 'react-native-iphone-x-helper';
@@ -32,9 +32,11 @@ class App extends Component {
       );
     }
     return (
-      <Provider store={store}>
-        <RootStack />
-      </Provider>
+      <View style={{ flex: 1 }}>
+        <Provider store={store}>
+          <RootStack />
+        </Provider>
+      </View>
     );
   }
 }

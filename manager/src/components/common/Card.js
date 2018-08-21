@@ -4,7 +4,7 @@ import { View } from 'react-native';
 // props.children - render any sub-components passed in
 const Card = props => {
   return (
-    <View style={styles.containerStyle}>
+    <View style={[styles.containerStyle, props.style]}>
       {props.children}
     </View>
   );

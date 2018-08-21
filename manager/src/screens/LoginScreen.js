@@ -4,7 +4,7 @@ import {
   Text,
   Button,
   TouchableHighlight,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import { web } from 'react-native-communications';
 import LoginForm from '../components/LoginForm';
@@ -26,7 +26,8 @@ class LoginScreen extends Component {
           title="Fade"
           color="#000"
         />
-      )
+      ),
+      headerBackTitle: null,
       // headerBackTitle: 'Back' // Name back button for next screen
     };
   };
@@ -110,12 +111,14 @@ class LoginScreen extends Component {
       <View style={{ flex: 1 }}>
         <LoginForm navigation={this.props.navigation} />
         <Button title="Web" onPress={() => web('https://www.google.com')} />
-
         {this.renderButton()}
-
         <Text style={{ alignSelf: 'center' }}>
           Count: {this.state.count}
         </Text>
+        <Button
+          title="Go To Animated Header Screen"
+          onPress={() => this.props.navigation.navigate('AnimatedHeaderScreen')}
+        />
       </View>
     );
   }

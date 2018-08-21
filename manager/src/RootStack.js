@@ -7,7 +7,8 @@ import {
   EmployeeListScreen,
   CreateEmployeeModal,
   FadeScreen2,
-  BottomScreen3
+  BottomScreen3,
+  AnimatedHeaderScreen
 } from './screens';
 import { SearchHeader } from './components/common';
 
@@ -228,6 +229,7 @@ const AppModalStack = createStackNavigator(
 
 // Combined stack to hold App and Fade screens (because different transitions)
 // NOTE: This header stays on top no matter what screen it's on
+// =========================== NOTE: Example Search custom header ===========================
 const AppMainStack = createStackNavigator(
   {
     AppMain: MainStack,
@@ -242,6 +244,7 @@ const AppMainStack = createStackNavigator(
     }
   }
 );
+// =============================== NOTE: Example End ===============================
 
 // Looks at route configurations top to bottom
 // If you swap "Main" and "Modals", it would show modals first
@@ -259,7 +262,8 @@ const AppStack = createStackNavigator(
 
 const AuthStack = createStackNavigator(
   {
-    LogIn: LoginScreen
+    LogIn: LoginScreen,
+    AnimatedHeaderScreen
   },
   {
     initialRouteName: 'LogIn',
