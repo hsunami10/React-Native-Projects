@@ -7,6 +7,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { web } from 'react-native-communications';
+import publicIP from 'react-native-public-ip';
+import axios from 'axios';
 import LoginForm from '../components/LoginForm';
 
 class LoginScreen extends Component {
@@ -38,6 +40,18 @@ class LoginScreen extends Component {
     this.state = { count: 0, loading: false, success: false };
     this.increaseCount = this.increaseCount.bind(this);
     this.onPress = this.onPress.bind(this);
+
+    // NOTE: Test ipstack API
+    publicIP().then(ip => {
+      axios.get(`http://api.ipstack.com/${ip}?access_key=cb40452f37f43418b39606112f00a1a4`)
+        .then(resp => {
+          console.log(resp.data);
+        })
+        .catch(err => {
+          console.log(err);
+          console.log(err.error.info);
+        });
+    });
   }
 
   componentWillMount() {

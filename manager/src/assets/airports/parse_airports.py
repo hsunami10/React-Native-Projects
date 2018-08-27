@@ -1,6 +1,8 @@
 import sys
 import json
 
+# https://openflights.org/data.html
+
 if len(sys.argv) != 2:
     print "Error: Please include one argument"
     exit(1)
