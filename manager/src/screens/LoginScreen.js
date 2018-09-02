@@ -42,16 +42,16 @@ class LoginScreen extends Component {
     this.onPress = this.onPress.bind(this);
 
     // NOTE: Test ipstack API
-    publicIP().then(ip => {
-      axios.get(`http://api.ipstack.com/${ip}?access_key=cb40452f37f43418b39606112f00a1a4`)
-        .then(resp => {
-          console.log(resp.data);
-        })
-        .catch(err => {
-          console.log(err);
-          console.log(err.error.info);
-        });
-    });
+    // publicIP().then(ip => {
+    //   axios.get(`http://api.ipstack.com/${ip}?access_key=cb40452f37f43418b39606112f00a1a4`)
+    //     .then(resp => {
+    //       console.log(resp.data);
+    //     })
+    //     .catch(err => {
+    //       console.log(err);
+    //       console.log(err.error.info);
+    //     });
+    // });
   }
 
   componentWillMount() {

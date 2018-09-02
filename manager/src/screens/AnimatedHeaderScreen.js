@@ -16,18 +16,15 @@ import { TabView, TabBar } from 'react-native-tab-view';
 import ExampleImage from '../../src/assets/images/example_image.jpg';
 import { Card } from '../components/common';
 
-const HomeScreen = ({ list }) => {
+// NOTE: Only work on this screen for an animated scrolling header
+const HomeScreen = ({ list, handleScroll }) => {
   return (
     <View style={{ flex: 1, justifyContent: 'center' }}>
       <Text style={{ alignSelf: 'center' }}>Home Screen!</Text>
       <ScrollView
         style={styles.fill}
         scrollEventThrottle={16}
-        onScroll={Animated.event([{ nativeEvent: {
-            contentOffset: {
-              y: this.scrollY
-            }
-          } }])}
+        onScroll={handleScroll}
       >
         <FlatList
           data={list}
@@ -68,14 +65,19 @@ const SettingsScreen = ({ list }) => {
   );
 };
 
-// TODO
-// Replace all '200' in navigationOptions to navigation.getParam('headerHeight', Header.HEIGHT)
+// BUG: Figure out how to animate header height
+// BUG: static navigationOptions only called once??? doesn't re-render on scroll event
 class AnimatedHeaderScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerBackground: (
-        <View style={styles.headerBackgroundViewStyle}>
-          <Image
+        <Animated.View
+          style={[
+            styles.headerBackgroundViewStyle,
+            { height: navigation.getParam('headerHeight', Header.HEIGHT) }
+          ]}
+        >
+          <Animated.Image
             style={[
               styles.imageStyle,
               { height: navigation.getParam('headerHeight', Header.HEIGHT) }
@@ -83,14 +85,14 @@ class AnimatedHeaderScreen extends Component {
             source={ExampleImage}
             blurRadius={0}
           />
-          <View
+          <Animated.View
             style={[
               styles.imageStyle,
               { backgroundColor: 'rgba(0,0,0,0.4)',
               height: navigation.getParam('headerHeight', Header.HEIGHT) }
             ]}
           />
-        </View>
+        </Animated.View>
       ),
       headerTitle: <HeaderTitle style={styles.headerTitleStyle}>Header Title!</HeaderTitle>,
       headerStyle: {
@@ -123,42 +125,57 @@ class AnimatedHeaderScreen extends Component {
           { key: 'home', title: 'Home' },
           { key: 'settings', title: 'Settings' }
         ]
-      }
+      },
+      scrollY: new Animated.Value(0)
     };
 
     this.renderScene = this.renderScene.bind(this);
     this.handleIndexChange = this.handleIndexChange.bind(this);
     this.handleTabPress = this.handleTabPress.bind(this);
-    this.scrollY = new Animated.Value(0);
+    this.handleScroll = this.handleScroll.bind(this);
   }
 
   componentWillMount() {
-    // this.props.navigation.setParams({
-    //   headerHeight: this.scrollY.interpolate({
-    //     inputRange: [0, this.state.HEADER_SCROLL_DISTANCE],
-    //     outputRange: [this.state.HEADER_MAX_HEIGHT, this.state.HEADER_MIN_HEIGHT],
-    //     extrapolate: 'clamp'
-    //   })
-    // });
     this.props.navigation.setParams({
-      headerHeight: this.state.HEADER_MAX_HEIGHT
+      headerHeight: this.state.scrollY.interpolate({
+        inputRange: [0, this.state.HEADER_SCROLL_DISTANCE],
+        outputRange: [this.state.HEADER_MAX_HEIGHT, this.state.HEADER_MIN_HEIGHT],
+        extrapolate: 'clamp'
+      })
+    });
+    // this.props.navigation.setParams({
+    //   headerHeight: this.state.HEADER_MAX_HEIGHT
+    // });
+  }
+
+  handleScroll(e) {
+    console.log('handleScroll');
+    console.log(e.nativeEvent.contentOffset.y);
+
+    return Animated.event([{
+      nativeEvent: {
+        contentOffset: {
+          y: this.state.scrollY
+        }
+      }
+    }], {
+      useNativeDriver: true
     });
   }
 
   handleIndexChange(index) {
-    console.log(index);
     this.setState((prevState) => ({
-      navigationState: { ...prevState.navigationState }, index
+      navigationState: { ...prevState.navigationState, index }
     }));
   }
 
   handleTabPress({ route }) {
     switch (route.key) {
       case 'home':
-        this.handleIndexChange(0);
+        console.log('scroll up home');
         return;
       case 'settings':
-        this.handleIndexChange(1);
+        console.log('scroll up settings');
         return;
       default:
         return;
@@ -168,7 +185,7 @@ class AnimatedHeaderScreen extends Component {
   renderScene = ({ route }) => {
     switch (route.key) {
     case 'home':
-      return <HomeScreen list={this.state.list} />;
+      return <HomeScreen list={this.state.list} handleScroll={this.handleScroll} />;
     case 'settings':
       return <SettingsScreen list={this.state.list} />;
     default:
@@ -195,7 +212,6 @@ class AnimatedHeaderScreen extends Component {
             />
           }
           onIndexChange={this.handleIndexChange}
-          canJumpToTab={() => true}
           useNativeDriver
         />
       </View>
