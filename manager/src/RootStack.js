@@ -1,6 +1,6 @@
 import { createStackNavigator, createMaterialTopTabNavigator } from 'react-navigation';
-import React from 'react';
-import { View, Text, Button } from 'react-native';
+import React, { Component } from 'react';
+import { View, Text, Button, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   LoginScreen,
@@ -138,21 +138,33 @@ const MainStack = createStackNavigator(
 );
 
 // ========================== NOTE: Example tab stack ==========================
-const HomeScreen = ({ navigation }) => (
-  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <Text>Home!</Text>
-    <Button
-      title="Fade to Two"
-      color="pink"
-      onPress={() => navigation.navigate('Fade2')}
-    />
-    <Button
-      title="Back to Log In"
-      color="red"
-      onPress={() => navigation.navigate('LogIn')}
-    />
-  </View>
-);
+// NOTE: Example of overriding the onPress of tab bar
+class HomeScreen extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    tabBarOnPress: () => {
+      console.log('pressed');
+      navigation.navigate('Home');
+    }
+  });
+
+  render() {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Home!</Text>
+        <Button
+          title="Fade to Two"
+          color="pink"
+          onPress={() => this.props.navigation.navigate('Fade2')}
+        />
+        <Button
+          title="Back to Log In"
+          color="red"
+          onPress={() => this.props.navigation.navigate('LogIn')}
+        />
+      </View>
+    );
+  }
+}
 
 const SettingsScreen = ({ navigation }) => (
   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

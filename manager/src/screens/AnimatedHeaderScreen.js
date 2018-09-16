@@ -136,16 +136,16 @@ class AnimatedHeaderScreen extends Component {
   }
 
   componentWillMount() {
-    this.props.navigation.setParams({
-      headerHeight: this.state.scrollY.interpolate({
-        inputRange: [0, this.state.HEADER_SCROLL_DISTANCE],
-        outputRange: [this.state.HEADER_MAX_HEIGHT, this.state.HEADER_MIN_HEIGHT],
-        extrapolate: 'clamp'
-      })
-    });
     // this.props.navigation.setParams({
-    //   headerHeight: this.state.HEADER_MAX_HEIGHT
+    //   headerHeight: this.state.scrollY.interpolate({
+    //     inputRange: [0, this.state.HEADER_SCROLL_DISTANCE],
+    //     outputRange: [this.state.HEADER_MAX_HEIGHT, this.state.HEADER_MIN_HEIGHT],
+    //     extrapolate: 'clamp'
+    //   })
     // });
+    this.props.navigation.setParams({
+      headerHeight: this.state.HEADER_MAX_HEIGHT
+    });
   }
 
   handleScroll(e) {
